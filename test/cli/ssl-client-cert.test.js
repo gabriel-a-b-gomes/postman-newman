@@ -2,9 +2,14 @@ const fs = require('fs'),
     async = require('async'),
     https = require('https'),
     expect = require('chai').expect;
+const os = require('os');
 
 describe('SSL Client certificates', function () {
     var server1, server2, server3;
+
+    const expandHome = (filePath) => {
+        return filePath.replace(/^~($|\/|\\)/, `${os.homedir()}\\`);
+    };
 
     function createHttpsServerWithCerts (certs) {
         return https.createServer({
@@ -27,6 +32,37 @@ describe('SSL Client certificates', function () {
     }
 
     before(function (done) {
+        fs.copyFile('test/fixtures/ssl/client.key', expandHome('~/client.key'), (err) => {
+            if (err) {
+                console.error('Error BEFOREALL', err);
+            }
+        });
+        fs.copyFile('test/fixtures/ssl/client.crt', expandHome('~/client.crt'), (err) => {
+            if (err) {
+                console.error('Error BEFOREALL', err);
+            }
+        });
+        fs.copyFile('test/fixtures/ssl/client2.key', expandHome('~/client2.key'), (err) => {
+            if (err) {
+                console.error('Error BEFOREALL', err);
+            }
+        });
+        fs.copyFile('test/fixtures/ssl/client2.crt', expandHome('~/client2.crt'), (err) => {
+            if (err) {
+                console.error('Error BEFOREALL', err);
+            }
+        });
+        fs.copyFile('test/fixtures/ssl/client3.key', expandHome('~/client3.key'), (err) => {
+            if (err) {
+                console.error('Error BEFOREALL', err);
+            }
+        });
+        fs.copyFile('test/fixtures/ssl/client3.crt', expandHome('~/client3.crt'), (err) => {
+            if (err) {
+                console.error('Error BEFOREALL', err);
+            }
+        });
+
         server1 = createHttpsServerWithCerts({
             key: 'test/fixtures/ssl/server.key',
             cert: 'test/fixtures/ssl/server.crt',
@@ -73,6 +109,37 @@ describe('SSL Client certificates', function () {
             }
         ], function (err) {
             done(err);
+        });
+
+        fs.unlink(expandHome('~/client.key'), (err) => {
+            if (err) {
+                console.error('Error AFTERALL', err);
+            }
+        });
+        fs.unlink(expandHome('~/client.crt'), (err) => {
+            if (err) {
+                console.error('Error AFTERALL', err);
+            }
+        });
+        fs.unlink(expandHome('~/client2.key'), (err) => {
+            if (err) {
+                console.error('Error AFTERALL', err);
+            }
+        });
+        fs.unlink(expandHome('~/client2.crt'), (err) => {
+            if (err) {
+                console.error('Error AFTERALL', err);
+            }
+        });
+        fs.unlink(expandHome('~/client3.key'), (err) => {
+            if (err) {
+                console.error('Error AFTERALL', err);
+            }
+        });
+        fs.unlink(expandHome('~/client3.crt'), (err) => {
+            if (err) {
+                console.error('Error AFTERALL', err);
+            }
         });
     });
 
