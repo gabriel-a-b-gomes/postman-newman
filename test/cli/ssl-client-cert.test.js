@@ -78,7 +78,15 @@ describe('SSL Client certificates', function () {
 
     it('should work correctly with relative path on cert and key paths', function (done) {
         // eslint-disable-next-line max-len
-        exec('node ./bin/newman.js run test/fixtures/run/ssl-client-cert-list.json --ssl-client-cert-list test/fixtures/files/ssl-client-cert-relative-config.json', function (code) {
+        exec('node ./bin/newman.js run test/fixtures/run/ssl-client-cert-list.json --ssl-client-cert-list test/fixtures/files/ssl-client-cert-relative-config.json -k', function (code) {
+            expect(code, 'should have exit code of 0').to.equal(0);
+            done();
+        });
+    });
+
+    it('should work correctly with standalone client certificates relatives', function (done) {
+        // eslint-disable-next-line max-len
+        exec('node ./bin/newman.js run test/fixtures/run/ssl-client-cert.json --ssl-client-cert ~/client.crt --ssl-client-key ~/client.key --ssl-client-passphrase password -k', function (code) {
             expect(code, 'should have exit code of 0').to.equal(0);
             done();
         });
